@@ -1,21 +1,53 @@
+const images = [
+  {
+    name:"roll",
+    imgurl:"diceroll.gif",
+  },
+  {
+    name: "one",
+    imgurl:"1.png",
+  } ,
+  {
+    name: "two",
+    imgurl:"2.png",
+  } ,
+  {
+    name: "three",
+    imgurl:"3.png",
+  } ,
+  {
+    name: "four",
+    imgurl:"4.png",
+  } ,
+  {
+    name: "five",
+    imgurl:"5.png",
+  } ,
+  {
+    name: "six",
+    imgurl:"6.png",
+  } ,
+]
+
+
+let key = 0;
 let end = 0;
+document.querySelector("#seven").addEventListener("input",checkbutton);
 document.querySelector(".button").addEventListener("click",  function(){
-thething();
+  key = document.getElementById('seven').value;
+  key = Math.floor(key);
+  console.log(key);
+thething(key);
 });
 
-async function thething(){
-  while(end != 24){
-  console.log("Delayed for 1 second.");
+async function thething(number){
+  while(end != number){
   let first = Math.floor(Math.random() * 6) + 1;
-  console.log(first);
   let second = Math.floor(Math.random() * 6) + 1;
-  console.log(second);
   let third = Math.floor(Math.random() * 6) + 1;
-  console.log(third);
   let fourth = Math.floor(Math.random() * 6) + 1;
-  console.log(fourth);
   end = first + second + third + fourth;
-  if ((end === 24)) {
+  if ((end === number)) {
       document.querySelector("body").insertAdjacentHTML(
           "beforeend",
           `<dialog class="card">
@@ -35,9 +67,18 @@ async function thething(){
       await wait(1000);
     }}
 }
-//delay timer function
+
 function wait(ms){
   return new Promise(resolve => {
     setTimeout(() => {resolve('')},ms);
   })
 }
+
+function replaceimg(){
+
+}
+
+function checkbutton() {
+  document.getElementById('Roll').disabled = (document.getElementById("seven").value==="");
+   }
+  //Conditional statement. sets status of disabled depending on if statement is true or false.
