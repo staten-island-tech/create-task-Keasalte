@@ -29,6 +29,48 @@ Dominic.clear.addEventListener("click", function(){
   document.querySelector(".previous2").innerText = '';
 })
 
+Dominic.med.addEventListener("click", function(){
+  if (rolls.length === 0) {
+  errorstuff();
+}
+else{
+const median = sortMed(rolls);
+rolls.push(median);
+gaming = true;
+document.getElementById("rolling").innerText = `Current selected number: ${median}.`
+thething(median);
+document.querySelector(".button").disabled = true
+}
+})
+
+Dominic.mean.addEventListener("click", function(){
+  if (rolls.length === 0) {
+  errorstuff();
+}
+else{
+const mean = sortMean(rolls);
+rolls.push(mean);
+gaming = true;
+document.getElementById("rolling").innerText = `Current selected number: ${mean}.`
+thething(mean);
+document.querySelector(".button").disabled = true
+}
+})
+
+Dominic.mod.addEventListener("click", function(){
+  if (rolls.length === 0) {
+  errorstuff();
+}
+else{
+const mode = sortMod(rolls);
+rolls.push(mode);
+gaming = true;
+document.getElementById("rolling").innerText = `Current selected number: ${mode}.`
+thething(mode);
+document.querySelector(".button").disabled = true
+}
+})
+
 async function thething(number){
   console.log(number);
   while(end != number){
@@ -46,7 +88,7 @@ async function thething(number){
           "beforeend",
           `<dialog class="card">
             <h2 class = "text">you win!</h2>
-            <button alt = "click escape to return" id="close" class="button-1" autofocus> click to return </button>
+            <button alt = "click to return" id="close" class="button-1" autofocus> click to return </button>
           </dialog>`
         );
       document.querySelector("dialog").showModal();
@@ -61,21 +103,21 @@ async function thething(number){
 
       }); 
       gaming = false;
-      removeitall();
       addhistory();
   } else {
       console.log(end);
       document.querySelector(".results").insertAdjacentHTML("afterbegin", 
       `<h2> You rolled ${end} </h2>`);
-      await wait(1);
+      gaming = false;
     }}
 }
 
+/* 
 function wait(ms){
   return new Promise(resolve => {
     setTimeout(() => {resolve('')},ms);
   })
-}
+} */
 
 function checkbutton() {
   console.log(gaming);
@@ -91,13 +133,78 @@ function replaceimg(a,b,c,d){
   document.getElementById("4").src = `${d}.png`;
 }
 
-function removeitall(){
+function addhistory(){
+  console.log(rolls)
   document.querySelector(".previous2").innerHTML ='';
+  for(let i = 0; i < rolls.length; i++){
+    document.querySelector(".previous2").insertAdjacentHTML("afterbegin", 
+    `<h2>${rolls[i]}</h2>`);
+  }
 }
 
-function addhistory(){
-  for(let i; i < rolls.length; i++){
-    document.querySelector(".previous2").insertAdjacentHTML("afterbegin", 
-    `${rolls[i]}`);
+function sortMed(numbers) {
+  const sorted = Array.from(numbers).sort((a, b) => a - b); //sort ascending
+  const middle = Math.floor(sorted.length / 2); 
+
+  if (sorted.length % 2 === 0) {
+      return (sorted[middle - 1] + sorted[middle]) / 2;
   }
+
+  return sorted[middle];
+}
+
+function sortMean(numbers){
+const total = numbers.reduce((a, b) => a + b, 0)
+return Math.floor(total / numbers.length)
+}
+
+function sortMod(numbers){
+
+  let object = {}
+
+  for (let i = 0; i < numbers.length; i++) {
+    if (object[numbers[i]]) {
+      // increment existing key's value
+      object[numbers[i]] += 1
+    } else {
+      // make a new key and set its value to 1
+      object[numbers[i]] = 1
+    }
+  }
+
+  // assign a value guaranteed to be smaller than any number in the array
+  let biggestValue = -1
+  let biggestValuesKey = -1
+
+  // finding the biggest value and its corresponding key
+  Object.keys(object).forEach(key => {
+    let value = object[key]
+    if (value > biggestValue) {
+      biggestValue = value
+      biggestValuesKey = key
+    }
+  })
+
+  return biggestValuesKey
+
+
+}
+
+function errorstuff(){
+  document.querySelector("body").insertAdjacentHTML(
+    "beforeend",
+    `<dialog class="card">
+      <h2 class = "text">There is no history!</h2>
+      <button alt = "click to return" id="close" class="button-1" autofocus> click to return </button>
+    </dialog>`
+  );
+  document.getElementById("close").addEventListener("click", function () {
+    this.parentElement.remove();})
+  document.querySelector("dialog").showModal();
+  document.querySelector("dialog").addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        event.preventDefault();
+    }
+}
+)
 }
