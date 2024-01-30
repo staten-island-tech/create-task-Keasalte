@@ -5,7 +5,7 @@ const Dominic = {
   mean: document.querySelector(".mean"),
   mod:document.querySelector(".mode"),
 }
-const rolls = []
+let rolls = []
 
 let gaming = false;
 let key = 0;
@@ -27,6 +27,7 @@ document.querySelector(".button").addEventListener("click",  function(){
 
 Dominic.clear.addEventListener("click", function(){
   document.querySelector(".previous2").innerText = '';
+  rolls = [];
 })
 
 Dominic.med.addEventListener("click", function(){
@@ -109,15 +110,10 @@ async function thething(number){
       document.querySelector(".results").insertAdjacentHTML("afterbegin", 
       `<h2> You rolled ${end} </h2>`);
       gaming = false;
+      await wait(100);
     }}
+    end = 0;
 }
-
-/* 
-function wait(ms){
-  return new Promise(resolve => {
-    setTimeout(() => {resolve('')},ms);
-  })
-} */
 
 function checkbutton() {
   console.log(gaming);
@@ -159,36 +155,32 @@ return Math.floor(total / numbers.length)
 }
 
 function sortMod(numbers){
+  const a = numbers.slice().sort((x, y) => x - y);
 
-  let object = {}
+  let bestStreak = 1;
+  let Highest = a[0];
+  let currentStreak = 1;
+  let Current = a[0];
 
-  for (let i = 0; i < numbers.length; i++) {
-    if (object[numbers[i]]) {
-      // increment existing key's value
-      object[numbers[i]] += 1
-    } else {
-      // make a new key and set its value to 1
-      object[numbers[i]] = 1
+  for (let i = 1; i < a.length; i++) {
+    if (a[i-1] !== a[i]) {
+      if (currentStreak > bestStreak) {
+        bestStreak = currentStreak;
+        Highest = Current;
+      }
+      currentStreak = 0;
+      Current = a[i];
     }
+    currentStreak++;
   }
+  return currentStreak > bestStreak ? Current : Highest;
+};
 
-  // assign a value guaranteed to be smaller than any number in the array
-  let biggestValue = -1
-  let biggestValuesKey = -1
-
-  // finding the biggest value and its corresponding key
-  Object.keys(object).forEach(key => {
-    let value = object[key]
-    if (value > biggestValue) {
-      biggestValue = value
-      biggestValuesKey = key
-    }
+function wait(ms){
+  return new Promise(resolve => {
+    setTimeout(() => {resolve('')},ms);
   })
-
-  return biggestValuesKey
-
-
-}
+} 
 
 function errorstuff(){
   document.querySelector("body").insertAdjacentHTML(
