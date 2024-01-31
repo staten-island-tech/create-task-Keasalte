@@ -7,22 +7,24 @@ const Dominic = {
 }
 let rolls = []
 
-let gaming = false;
 let key = 0;
 let end = 0;
 
-document.querySelector("#seven").addEventListener("input",checkbutton);
+document.getElementById("seven").disabled =  false
+document.querySelector(".button").disabled = false
+
 document.querySelector(".button").addEventListener("click",  function(){
+  document.getElementById("seven").disabled =  true
+  document.querySelector(".button").disabled = true
   key = document.getElementById('seven').value;
   key = Math.floor(key);
   console.log(key);
   key = Math.max(4,key);
   key = Math.min(24,key);
   rolls.push(key);
-  gaming = true;
   document.getElementById("rolling").innerText = `Current selected number: ${key}.`
   thething(key);
-  document.querySelector(".button").disabled = true
+
 });
 
 Dominic.clear.addEventListener("click", function(){
@@ -37,9 +39,9 @@ Dominic.med.addEventListener("click", function(){
 else{
 const median = sortMed(rolls);
 rolls.push(median);
-gaming = true;
 document.getElementById("rolling").innerText = `Current selected number: ${median}.`
 thething(median);
+document.getElementById("seven").disabled =  true
 document.querySelector(".button").disabled = true
 }
 })
@@ -51,9 +53,9 @@ Dominic.mean.addEventListener("click", function(){
 else{
 const mean = sortMean(rolls);
 rolls.push(mean);
-gaming = true;
 document.getElementById("rolling").innerText = `Current selected number: ${mean}.`
 thething(mean);
+document.getElementById("seven").disabled =  true
 document.querySelector(".button").disabled = true
 }
 })
@@ -65,9 +67,9 @@ Dominic.mod.addEventListener("click", function(){
 else{
 const mode = sortMod(rolls);
 rolls.push(mode);
-gaming = true;
 document.getElementById("rolling").innerText = `Current selected number: ${mode}.`
 thething(mode);
+document.getElementById("seven").disabled =  true
 document.querySelector(".button").disabled = true
 }
 })
@@ -103,23 +105,17 @@ async function thething(number){
       document.querySelector(".results").replaceChildren();
 
       }); 
-      gaming = false;
       addhistory();
+      document.getElementById("seven").disabled =  false
+      document.querySelector(".button").disabled = false
   } else {
       console.log(end);
       document.querySelector(".results").insertAdjacentHTML("afterbegin", 
       `<h2> You rolled ${end} </h2>`);
-      gaming = false;
-      await wait(100);
     }}
     end = 0;
 }
 
-function checkbutton() {
-  console.log(gaming);
-  document.getElementById('Roll').disabled = (document.getElementById("seven").value==="" || gaming);
-   }
-  //Conditional statement. sets status of disabled depending on if statement is true or false.
 
 function replaceimg(a,b,c,d){
   console.log(a,b,c,d)
